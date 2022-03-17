@@ -30,10 +30,10 @@ alpha = 0.02;
 
 fprintf('Testing cost function ...');
 % calculating value of initial cost function
-J = compute_cost(X, y, theta);
+J = compute_cost(X, y, theta, m);
 % running gradient descent
 fprintf('\nStarting gradient descent...');
-theta = batch_gradient_descent(theta, X, y, alpha, steps);
+theta = batch_gradient_descent(theta, X, y, alpha, m, steps);
 fprintf('\nTheta calculated using gradient descent:\n');
 fprintf('%f\n', theta);
 
@@ -50,23 +50,22 @@ legend('Training data', 'Linear regression');
 hold off
 
 % method to calculate J(theta) to check convergence
-function [J] = compute_cost(X, y, theta)
-    m = length(y);
-    hypothesis = X * theta;
-    J = sum((hypothesis - y).^2);
+function [J] = compute_cost(X, y, theta, m)
+    h = X * theta;
+    J = sum((h - y).^2);
     J = J/(2*m);
 end
 
 % updating cost function
-function [theta] = batch_gradient_descent(theta, X, y, alpha, n)
-    m = length(y);
+function [theta] = batch_gradient_descent(theta, X, y, alpha, m, n)
     J_vals = zeros(n, 1);
     for i = 1:n
         error = (X * theta) - y;
         for j = 1:length(theta)
             theta(j) = theta(j) - alpha/m * (error' * X(:,j));
         end
-        J_vals(i,j) = compute_cost(X, y, theta);
+        J_vals(i,j) = compute_cost(X, y, theta, m);
+        fprintf('\nCost: %f',J_vals(i,j));
     end
 end
 
